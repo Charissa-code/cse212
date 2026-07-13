@@ -11,7 +11,7 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: Players were being pulled LIFO. Corrected PersonQueue to have player Added instead of inserted so they always went to the end of the queue.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -26,7 +26,7 @@ public class TakingTurnsQueueTests
         players.AddPerson(sue.Name, sue.Turns);
 
         int i = 0;
-        while (players.Length > 0)
+        while (players.Length > 0) 
         {
             if (i >= expectedResult.Length)
             {
@@ -43,7 +43,7 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Defect(s) Found: The players were not being played FIFO. PersonQueue had it written like a stack. By changed "Insert" to "Add", I ensured players would be added to the back of the queue and they would be played in the correct order.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -85,7 +85,7 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: The defect here was that  the program did not have a way to check turns and let the ForeverZero players be identified as infinite and also continue to be enqueued infinitely. By changing the program in .GetNextPerson() to include both scenarios with <=0 turns from the beginning, making them an infinite turn individual, then that ensures they will be enqueued forever in the game and never be dropped. I also corrected PersonQueue to make sure players were pulled FIFO and not LIFO as it was written.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -116,7 +116,7 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: The defect here was that  the program did not have a way to check turns and let the ForeverNegative players be identified as infinite and also continue to be enqueued infinitely. By changing the program in .GetNextPerson() to include both scenarios with <=0 turns from the beginning, making them an infinite turn individual, then that ensures they will be enqueued forever in the game and never be dropped. I also corrected PersonQueue.cs to ensure the turns were being pulled FIFO and not LIFO as it was written.     
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -143,7 +143,7 @@ public class TakingTurnsQueueTests
     [TestMethod]
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Defect(s) No defects found in original test.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
