@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 /// <summary>
 /// Defines a maze using a dictionary. The dictionary is provided by the
 /// user when the Maze object is created. The dictionary will contain the
@@ -33,6 +35,14 @@ public class Maze
     public void MoveLeft()
     {
         // FILL IN CODE
+        bool canGoLeft = _mazeMap[(_currX, _currY)][0];
+
+        if (!canGoLeft)
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        _currX = _currX - 1;
     }
 
     /// <summary>
@@ -42,6 +52,14 @@ public class Maze
     public void MoveRight()
     {
         // FILL IN CODE
+        bool canGoRight = _mazeMap[(_currX, _currY)][1];
+
+        if (!canGoRight)
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        _currX = _currX + 1;
     }
 
     /// <summary>
@@ -51,6 +69,14 @@ public class Maze
     public void MoveUp()
     {
         // FILL IN CODE
+        bool canGoUp = _mazeMap[(_currX, _currY)][2];
+
+        if (!canGoUp)
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        _currY = _currY - 1;
     }
 
     /// <summary>
@@ -60,6 +86,14 @@ public class Maze
     public void MoveDown()
     {
         // FILL IN CODE
+        bool canGoDown = _mazeMap[(_currX, _currY)][3];
+
+        if (!canGoDown)
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        _currY = _currY +1;
     }
 
     public string GetStatus()

@@ -1,5 +1,5 @@
 using System.Text.Json;
-
+using System.Linq;
 public static class SetsAndMaps
 {
     /// <summary>
@@ -22,8 +22,28 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var seen = new HashSet<string>();
+        var mirrors = new List<string>();
+
+        foreach (string word in words)
+        {
+            string reversed = new string(word.Reverse().ToArray());
+            if (word == reversed)
+                continue;
+            if (seen.Contains(reversed))
+            {
+                mirrors.Add($"{word} & {reversed}");
+            }
+            else
+                seen.Add(word);
+
+        }
+
+        return mirrors.ToArray();
     }
+
+
+
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -42,11 +62,21 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
+            var degree = fields[3];
             // TODO Problem 2 - ADD YOUR CODE HERE
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree] = degrees[degree] + 1;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
     }
+
 
     /// <summary>
     /// Determine if 'word1' and 'word2' are anagrams.  An anagram
@@ -67,8 +97,47 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var w1Dict = new Dictionary<char, int>();
+        word1 = word1.ToLower().Replace(" ", "");
+        word2 = word2.ToLower().Replace(" ", "");
+
+
+        foreach (char letter in word1)
+        {
+            if (w1Dict.ContainsKey(letter))
+            {
+                w1Dict[letter] = w1Dict[letter] + 1;
+            }
+            else
+            {
+                w1Dict[letter] = 1;
+            }
+        }
+
+        foreach (char letter in word2)
+        {
+            if (w1Dict.ContainsKey(letter))
+            {
+                w1Dict[letter] = w1Dict[letter] - 1;
+            }
+            else
+                return false;
+        }
+
+        foreach (var pair in w1Dict)
+        {
+            if (pair.Value != 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
+
+
+
+
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
